@@ -9,19 +9,24 @@ const FOLDER = config.folder;
 
 // Regularly Check if YouTube URL is in clipboard
 setInterval(async () => {
-  const content = clipboardy.readSync();
+  let content = '';
+  try {
+    content = clipboardy.readSync();
+  } catch { }
 
   if (!content.startsWith("https://www.youtube.com/watch?v=")) return;
   if (content === lastVideo) return;
 
   lastVideo = content;
 
-  const title = (
-    await ytdl.getInfo(content)
-  ).player_response.videoDetails.title.replace(/[/\\?%*:|"<>]/g, "-");
+  const info = await ytdl.getInfo(content);
+  const title = info.player_response.videoDetails.title.replace(/[/\\?%*:|"<>]/g, "-");
   const stream = ytdl(content);
 
   ffmpeg(stream)
     .audioBitrate(128)
-    .save(FOLDER + title + ".mp3");
+    .save("file:" + FOLDER + title + ".mp3")
+    .outputOption(['-y']);
 }, SLEEP_TIME);
+
+console.log('Waiting for YouTube Links to be copied')
