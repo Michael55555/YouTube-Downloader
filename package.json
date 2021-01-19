@@ -14,9 +14,7 @@
     "express": "^4.17.1"
   },
   "dependencies": {
-    "clipboard": "^2.0.6",
     "clipboardy": "^2.3.0",
-    "electron": "^11.2.0",
     "fluent-ffmpeg": "^2.1.2",
     "ytdl-core": "^4.4.3"
   }
